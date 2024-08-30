@@ -1,26 +1,35 @@
-/*import { createServer } from "node:http";
-
-const server = createServer((request, response) => {
-  response.write("Hello World");
-
-  return response.end();
-});
-
-server.listen(3333);
-*/
-
 import { fastify } from "fastify";
+import { DatabaseMemory } from "./database-memory.js";
 
 const server = fastify();
 
-server.get("/", () => {
+const database = new DatabaseMemory();
+
+// GET, POST, PUT, DELETE
+
+server.post("/videos", (request, reply) => {
+  database.create({
+    title: "Video 01",
+    description: "Esse é o video 01",
+    duration: 180,
+  });
+
+  console.log(database.list());
+
+  return reply.status(201);
+});
+
+server.get("/videos", () => {
   return "Hello World!";
 });
-server.get("/node", () => {
-  return "Hello Node!";
+
+// Router Parameter
+server.put("/videos/:id", () => {
+  return "Hello World!";
 });
-server.get("/rockeseat", () => {
-  return "Hello Rockseate!";
+
+server.delete("/videos/:id", () => {
+  return "Hello World!";
 });
 
 server.listen({
